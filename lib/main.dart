@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/navigator/routes.dart';
+
+import 'navigator/route_parser.dart';
+import 'navigator/router.dart';
+
+import 'views/first_project.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  AppRouterDelegate _appRouterDelegate = AppRouterDelegate();
+  AppRouteInformationParser _appRouteInformationParser =
+      AppRouteInformationParser();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
+      title: 'Portfolio',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routerDelegate: _appRouterDelegate,
+      routeInformationParser: _appRouteInformationParser,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+class MainPage extends StatefulWidget {
+  MainPage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -39,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Portfolio'),
       ),
       body: Center(
         child: Column(
@@ -51,6 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            InkWell(
+              child: Container(
+                child: Center(
+                  child: Text('Move First Project'),
+                ),
+              ),
+              onTap: () {
+                (Router.of(context).routerDelegate as AppRouterDelegate)
+                    .changePage(
+                  FirstProjectRoute(),
+                );
+              },
             ),
           ],
         ),
