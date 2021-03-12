@@ -1,6 +1,7 @@
 class AllRoutes {
   // routes add
   final List<AppRoute> routes = [
+    PortfolioRoute(),
     HomeRoute(),
     FirstProjectRoute(),
     UnknownRoute(),
@@ -13,7 +14,12 @@ abstract class AppRoute {
 
 class HomeRoute extends AppRoute {
   @override
-  String id = 'home';
+  String id = '';
+}
+
+class PortfolioRoute extends AppRoute {
+  @override
+  String id = 'portfolio';
 }
 
 class FirstProjectRoute extends AppRoute {

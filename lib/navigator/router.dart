@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../views/portfolio_screen.dart';
 import '../views/first_project.dart';
 import '../views/unknown_screen.dart';
 
@@ -45,21 +48,26 @@ class AppRouterDelegate extends RouterDelegate<AppRoute>
     );
   }
 
-  MaterialPage _getPage(AppRoute path) {
+  Page _getPage(AppRoute path) {
     if (path == null)
-      return MaterialPage(
-        key: ValueKey('home'),
+      return AnimatedPage(
+        key: ValueKey('main'),
         child: MainPage(),
       );
 
-    if (path.id == 'firstProject') {
-      return MaterialPage(
+    if (path.id == 'portfolio') {
+      return AnimatedPage(
+        key: ValueKey('portfolio'),
+        child: PortfolioScreen(),
+      );
+    } else if (path.id == 'firstProject') {
+      return AnimatedPage(
         key: ValueKey('firstProject'),
         child: FirstProject(),
       );
-    } else if (path.id == 'home') {
-      return MaterialPage(
-        key: ValueKey('home'),
+    } else if (path.id == '') {
+      return AnimatedPage(
+        key: ValueKey('main'),
         child: MainPage(),
       );
     }
@@ -73,5 +81,65 @@ class AppRouterDelegate extends RouterDelegate<AppRoute>
   void changePage(AppRoute path) {
     this._curPath = path;
     notifyListeners();
+  }
+}
+
+class AnimatedPage extends Page {
+  final Widget child;
+
+  AnimatedPage({Key key, this.child}) : super(key: key);
+
+  Route createRoute(BuildContext context) {
+    return AnimatedPageRoute(
+      builder: (context) => child,
+      settings: this,
+    );
+  }
+}
+
+class AnimatedPageRoute extends MaterialPageRoute {
+  AnimatedPageRoute({
+    @required WidgetBuilder builder,
+    RouteSettings settings,
+  }) : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    var begin = Offset(1.0, 0.0);
+    var end = Offset.zero;
+    var tween = Tween(begin: begin, end: end).chain(
+      CurveTween(
+        curve: Curves.easeInOutBack,
+      ),
+    );
+
+    var offsetAnimation = animation.drive(tween);
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: child,
+    );
+  }
+}
+
+class NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
+  NoAnimationMaterialPageRoute({
+    @required WidgetBuilder builder,
+    RouteSettings settings,
+  }) : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
   }
 }

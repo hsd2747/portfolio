@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio/navigator/routes.dart';
+import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
+import 'navigator/routes.dart';
 import 'navigator/route_parser.dart';
 import 'navigator/router.dart';
 
-import 'views/first_project.dart';
+import 'models/mouse_cursor.dart';
 
 import 'components/sequence_animation.dart';
 
@@ -19,13 +21,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Portfolio',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routerDelegate: _appRouterDelegate,
-      routeInformationParser: _appRouteInformationParser,
+    return ChangeNotifierProvider(
+      create: (context) => MouseCursorModel(),
+      builder: (context, child) {
+        return MaterialApp.router(
+          title: 'Portfolio',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          routerDelegate: _appRouterDelegate,
+          routeInformationParser: _appRouteInformationParser,
+        );
+      },
     );
   }
 }
@@ -40,14 +47,20 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  int _counter = 0;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   void initState() {
     _controller = AnimationController(
       vsync: this,
       duration: Duration(
-        seconds: 7,
+        milliseconds: 1000,
       ),
     );
 
@@ -60,84 +73,138 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SequenceAnimation(
-                controller: _controller,
-                startInterval: 0.0,
-                endInterval: 0.100,
-                axis: AnimationAxis.right,
-                child: Container(
-                  width: 90,
-                  height: 90,
-                  margin: EdgeInsets.fromLTRB(0, 50, 0, 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(45.0),
-                    color: Colors.indigo,
-                  ),
-                  child: Center(
-                    child: Text('사진'),
-                  ),
-                ),
-              ),
-              SequenceAnimation(
-                controller: _controller,
-                startInterval: 0.100,
-                endInterval: 0.200,
-                child: Row(
+    final mouseCursorModel = Provider.of<MouseCursorModel>(
+      context,
+      listen: false,
+    );
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.none,
+      onHover: (eve) {
+        mouseCursorModel.changeCursorPoint(eve.position);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('example text1'),
-                    SizedBox(width: 15),
-                    Text('example text2'),
-                    SizedBox(width: 15),
-                    Text('example text3'),
-                    SizedBox(width: 15),
-                    Text('example text4'),
+                  children: <Widget>[
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.100,
+                      endInterval: 0.600,
+                      axis: AnimationAxis.right,
+                      child: menuWidget('Portfolio', onTap: () {
+                        (Router.of(context).routerDelegate as AppRouterDelegate)
+                            .changePage(
+                          PortfolioRoute(),
+                        );
+                      }),
+                    ),
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.200,
+                      endInterval: 0.700,
+                      axis: AnimationAxis.right,
+                      child: menuWidget(
+                        'Project 1',
+                        onTap: () {
+                          (Router.of(context).routerDelegate
+                                  as AppRouterDelegate)
+                              .changePage(
+                            FirstProjectRoute(),
+                          );
+                        },
+                      ),
+                    ),
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.300,
+                      endInterval: 0.800,
+                      axis: AnimationAxis.right,
+                      child: menuWidget('Project 2'),
+                    ),
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.400,
+                      endInterval: 0.900,
+                      axis: AnimationAxis.right,
+                      child: menuWidget('Project 3'),
+                    ),
                   ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              InkWell(
-                child: Container(
-                  child: Center(
-                    child: Text('Move First Project'),
+                );
+              },
+            ),
+            Selector<MouseCursorModel, Offset>(
+              selector: (context, model) => model.secondPosition,
+              builder: (context, secondPosition, child) {
+                return Positioned(
+                  left: secondPosition.dx - 15,
+                  top: secondPosition.dy - 15,
+                  child: IgnorePointer(
+                    ignoring: true,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.indigo[300],
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
                   ),
-                ),
-                onTap: () {
-                  (Router.of(context).routerDelegate as AppRouterDelegate)
-                      .changePage(
-                    FirstProjectRoute(),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+                );
+              },
+            ),
+            Selector<MouseCursorModel, Offset>(
+              selector: (context, model) => model.mousePosition,
+              builder: (context, mousePosition, child) {
+                return Positioned(
+                  left: mousePosition.dx,
+                  top: mousePosition.dy,
+                  child: IgnorePointer(
+                    ignoring: true,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.indigo[700],
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  Widget menuWidget(
+    String title, {
+    VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.fromLTRB(32, 16, 32, 16),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 24),
+          ),
+        ),
+      ),
+      onTap: onTap,
+    );
   }
 }
