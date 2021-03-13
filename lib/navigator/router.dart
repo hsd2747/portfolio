@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../views/main_menu_screen.dart';
 import '../views/portfolio_screen.dart';
 import '../views/first_project.dart';
 import '../views/unknown_screen.dart';
@@ -52,7 +53,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoute>
     if (path == null)
       return AnimatedPage(
         key: ValueKey('main'),
-        child: MainPage(),
+        child: MainMenuScreen(),
       );
 
     if (path.id == 'portfolio') {
@@ -68,7 +69,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoute>
     } else if (path.id == '') {
       return AnimatedPage(
         key: ValueKey('main'),
-        child: MainPage(),
+        child: MainMenuScreen(),
       );
     }
 

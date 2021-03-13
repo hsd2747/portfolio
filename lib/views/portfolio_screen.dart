@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../components/sequence_animation.dart';
 
+import '../theme/theme_manager.dart';
+
 class PortfolioScreen extends StatefulWidget {
   @override
   _PortfolioScreenState createState() => _PortfolioScreenState();
@@ -28,7 +30,7 @@ class _PortfolioScreenState extends State<PortfolioScreen>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.forward();
+      if (mounted) _controller.forward();
     });
 
     super.initState();
@@ -37,7 +39,7 @@ class _PortfolioScreenState extends State<PortfolioScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CustomTheme.of(context).background,
       body: Stack(
         children: [
           AnimatedBuilder(
@@ -52,7 +54,33 @@ class _PortfolioScreenState extends State<PortfolioScreen>
                     startInterval: 0.0,
                     endInterval: 0.100,
                     axis: AnimationAxis.top,
-                    child: profileImageWidget(),
+                    child: SizedBox(
+                      width: 260,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          profileImageWidget(),
+                          SizedBox(height: 20),
+                          Text(
+                            '한 승 대',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: CustomTheme.of(context).mainColor,
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          Text(
+                            '"Lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt."',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: CustomTheme.of(context).mainColorLight50,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(width: 50),
                   Column(
@@ -65,13 +93,33 @@ class _PortfolioScreenState extends State<PortfolioScreen>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('example text1'),
+                            Text(
+                              'example text1',
+                              style: TextStyle(
+                                color: CustomTheme.of(context).mainTextColor,
+                              ),
+                            ),
                             SizedBox(width: 15),
-                            Text('example text2'),
+                            Text(
+                              'example text2',
+                              style: TextStyle(
+                                color: CustomTheme.of(context).mainTextColor,
+                              ),
+                            ),
                             SizedBox(width: 15),
-                            Text('example text3'),
+                            Text(
+                              'example text3',
+                              style: TextStyle(
+                                color: CustomTheme.of(context).mainTextColor,
+                              ),
+                            ),
                             SizedBox(width: 15),
-                            Text('example text4'),
+                            Text(
+                              'example text4',
+                              style: TextStyle(
+                                color: CustomTheme.of(context).mainTextColor,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -84,6 +132,9 @@ class _PortfolioScreenState extends State<PortfolioScreen>
                           children: [
                             Text(
                               'You have pushed the button this many times:',
+                              style: TextStyle(
+                                color: CustomTheme.of(context).mainTextColor,
+                              ),
                             ),
                           ],
                         ),
@@ -109,8 +160,8 @@ class _PortfolioScreenState extends State<PortfolioScreen>
             Container(
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
-                  color: Colors.grey[400],
-                  offset: Offset(2, 2),
+                  color: CustomTheme.of(context).subTextColor4,
+                  offset: Offset(3, 3),
                   blurRadius: 7,
                   spreadRadius: 1,
                 )
@@ -122,17 +173,22 @@ class _PortfolioScreenState extends State<PortfolioScreen>
                     width: 170,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.indigo[300],
+                      color: CustomTheme.of(context).mainColor,
                     ),
                     child: Center(
-                      child: Text('사진'),
+                      child: Text(
+                        '사진',
+                        style: TextStyle(
+                          color: CustomTheme.of(context).mainTextColor,
+                        ),
+                      ),
                     ),
                   ),
                   Container(
                     width: 170,
-                    height: 50,
+                    height: 60,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: CustomTheme.of(context).background,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -141,16 +197,18 @@ class _PortfolioScreenState extends State<PortfolioScreen>
                         Text(
                           'HAN SEUNG DAE',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: CustomTheme.of(context).mainTextColor,
                           ),
                         ),
                         SizedBox(height: 3),
                         Text(
                           'CHARMING',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
+                            color: CustomTheme.of(context).mainTextColor,
                           ),
                         )
                       ],
@@ -162,13 +220,13 @@ class _PortfolioScreenState extends State<PortfolioScreen>
             Align(
               alignment: Alignment.topCenter,
               child: Transform.translate(
-                offset: Offset(0, -15),
+                offset: Offset(0, -22),
                 child: Container(
-                  width: 30,
-                  height: 30,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.indigoAccent.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(22),
+                    color: CustomTheme.of(context).cardBackground,
                   ),
                 ),
               ),
