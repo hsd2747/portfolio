@@ -4,6 +4,8 @@ class AllRoutes {
     PortfolioRoute(),
     HomeRoute(),
     FirstProjectRoute(),
+    SecondProjectRoute(),
+    ThirdProjectRoute(),
     UnknownRoute(),
   ];
 }
@@ -25,6 +27,16 @@ class PortfolioRoute extends AppRoute {
 class FirstProjectRoute extends AppRoute {
   @override
   String id = 'firstProject';
+}
+
+class SecondProjectRoute extends AppRoute {
+  @override
+  String id = 'secondProject';
+}
+
+class ThirdProjectRoute extends AppRoute {
+  @override
+  String id = 'thirdProject';
 }
 
 class UnknownRoute extends AppRoute {

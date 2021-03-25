@@ -26,4 +26,9 @@ class MouseCursorModel extends ChangeNotifier {
     this.secondPosition = position;
     safetyNotifyListeners();
   }
+
+  void setHoverButton(bool hoverButton) {
+    this.hoverButton = hoverButton;
+    safetyNotifyListeners();
+  }
 }

@@ -3,9 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../views/custom_cursor_wrap.dart';
 import '../views/main_menu_screen.dart';
 import '../views/portfolio_screen.dart';
-import '../views/first_project.dart';
+import '../views/first_project/first_project.dart';
+import '../views/second_project/second_project.dart';
+import '../views/third_project/third_project.dart';
+
 import '../views/unknown_screen.dart';
 
 import 'routes.dart';
@@ -66,6 +70,16 @@ class AppRouterDelegate extends RouterDelegate<AppRoute>
         key: ValueKey('firstProject'),
         child: FirstProject(),
       );
+    } else if (path.id == 'secondProject') {
+      return AnimatedPage(
+        key: ValueKey('secondProject'),
+        child: SecondProject(),
+      );
+    } else if (path.id == 'thirdProject') {
+      return AnimatedPage(
+        key: ValueKey('thirdProject'),
+        child: ThirdProject(),
+      );
     } else if (path.id == '') {
       return AnimatedPage(
         key: ValueKey('main'),
@@ -92,7 +106,9 @@ class AnimatedPage extends Page {
 
   Route createRoute(BuildContext context) {
     return AnimatedPageRoute(
-      builder: (context) => child,
+      builder: (context) => CustomCursorWrap(
+        child: child,
+      ),
       settings: this,
     );
   }

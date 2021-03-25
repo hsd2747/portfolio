@@ -24,6 +24,8 @@ class _MyAppState extends State<MyApp> {
   final AppRouteInformationParser _appRouteInformationParser =
       AppRouteInformationParser();
 
+  final mouseCursorModel = MouseCursorModel();
+
   // theme
   CustomThemeData customThemeData;
 
@@ -44,8 +46,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MouseCursorModel(),
+    return ChangeNotifierProvider.value(
+      value: mouseCursorModel,
       builder: (context, child) {
         return AnimatedCustomTheme(
           customThemeData: this.customThemeData,

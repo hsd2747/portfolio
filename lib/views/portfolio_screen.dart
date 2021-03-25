@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/sequence_animation.dart';
 
+import '../components/sequence_animation.dart';
 import '../theme/theme_manager.dart';
 
 class PortfolioScreen extends StatefulWidget {
@@ -38,112 +39,262 @@ class _PortfolioScreenState extends State<PortfolioScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomTheme.of(context).background,
-      body: Stack(
-        children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SequenceAnimation(
-                    controller: _controller,
-                    startInterval: 0.0,
-                    endInterval: 0.100,
-                    axis: AnimationAxis.top,
-                    child: SizedBox(
-                      width: 260,
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SequenceAnimation(
+                  controller: _controller,
+                  startInterval: 0.0,
+                  endInterval: 0.100,
+                  axis: AnimationAxis.top,
+                  child: SizedBox(
+                    width: 260,
+                    child: profileImageWidget(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                SequenceAnimation(
+                  startInterval: 0.100,
+                  endInterval: 0.200,
+                  controller: _controller,
+                  axis: AnimationAxis.right,
+                  child: Text(
+                    '한 승 대',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: CustomTheme.of(context).mainColor,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                SequenceAnimation(
+                  startInterval: 0.200,
+                  endInterval: 0.300,
+                  controller: _controller,
+                  axis: AnimationAxis.right,
+                  child: SizedBox(
+                    width: 300,
+                    child: Text(
+                      '"Lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt."',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: CustomTheme.of(context).mainColorLight50,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: 50),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  children: [
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.300,
+                      endInterval: 0.400,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          profileImageWidget(),
-                          SizedBox(height: 20),
                           Text(
-                            '한 승 대',
+                            'PROFILE',
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                               color: CustomTheme.of(context).mainColor,
                             ),
                           ),
-                          SizedBox(height: 30),
-                          Text(
-                            '"Lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt."',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: CustomTheme.of(context).mainColorLight50,
-                            ),
+                          Container(
+                            height: 2,
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                            color: CustomTheme.of(context).mainColor,
+                          ),
+                          profileChildWidget(
+                            '생년월일',
+                            '1999년 1월 25일',
+                          ),
+                          profileChildWidget(
+                            '전화번호',
+                            '010-4145-2757',
+                          ),
+                          profileChildWidget(
+                            '메일',
+                            'tmdeo2747@gmail.com',
+                          ),
+                          profileChildWidget(
+                            'Git',
+                            'https://github.com/hsd2747',
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(width: 50),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SequenceAnimation(
-                        controller: _controller,
-                        startInterval: 0.100,
-                        endInterval: 0.200,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'example text1',
-                              style: TextStyle(
-                                color: CustomTheme.of(context).mainTextColor,
-                              ),
+                    SizedBox(width: 50),
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.320,
+                      endInterval: 0.420,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'PROFILE',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: CustomTheme.of(context).mainColor,
                             ),
-                            SizedBox(width: 15),
-                            Text(
-                              'example text2',
-                              style: TextStyle(
-                                color: CustomTheme.of(context).mainTextColor,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Text(
-                              'example text3',
-                              style: TextStyle(
-                                color: CustomTheme.of(context).mainTextColor,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Text(
-                              'example text4',
-                              style: TextStyle(
-                                color: CustomTheme.of(context).mainTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          Container(
+                            height: 2,
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                            color: CustomTheme.of(context).mainColor,
+                          ),
+                          profileChildWidget(
+                            '생년월일',
+                            '1999년 1월 25일',
+                          ),
+                          profileChildWidget(
+                            '전화번호',
+                            '010-4145-2757',
+                          ),
+                          profileChildWidget(
+                            '메일',
+                            'tmdeo2747@gmail.com',
+                          ),
+                          profileChildWidget(
+                            'Git',
+                            'https://github.com/hsd2747',
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 20),
-                      SequenceAnimation(
-                        controller: _controller,
-                        startInterval: 0.200,
-                        endInterval: 0.300,
-                        child: Column(
-                          children: [
-                            Text(
-                              'You have pushed the button this many times:',
-                              style: TextStyle(
-                                color: CustomTheme.of(context).mainTextColor,
-                              ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 50),
+                Row(
+                  children: [
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.340,
+                      endInterval: 0.440,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'PROFILE',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: CustomTheme.of(context).mainColor,
                             ),
-                          ],
-                        ),
+                          ),
+                          Container(
+                            height: 2,
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                            color: CustomTheme.of(context).mainColor,
+                          ),
+                          profileChildWidget(
+                            '생년월일',
+                            '1999년 1월 25일',
+                          ),
+                          profileChildWidget(
+                            '전화번호',
+                            '010-4145-2757',
+                          ),
+                          profileChildWidget(
+                            '메일',
+                            'tmdeo2747@gmail.com',
+                          ),
+                          profileChildWidget(
+                            'Git',
+                            'https://github.com/hsd2747',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              );
-            },
+                    ),
+                    SizedBox(width: 50),
+                    SequenceAnimation(
+                      controller: _controller,
+                      startInterval: 0.360,
+                      endInterval: 0.460,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'PROFILE',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: CustomTheme.of(context).mainColor,
+                            ),
+                          ),
+                          Container(
+                            height: 2,
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                            color: CustomTheme.of(context).mainColor,
+                          ),
+                          profileChildWidget(
+                            '생년월일',
+                            '1999년 1월 25일',
+                          ),
+                          profileChildWidget(
+                            '전화번호',
+                            '010-4145-2757',
+                          ),
+                          profileChildWidget(
+                            '메일',
+                            'tmdeo2747@gmail.com',
+                          ),
+                          profileChildWidget(
+                            'Git',
+                            'https://github.com/hsd2747',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget profileChildWidget(
+    String title,
+    String text,
+  ) {
+    return Padding(
+      padding: EdgeInsets.only(top: 15),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              color: CustomTheme.of(context).mainColorLight50,
+            ),
+          ),
+          SizedBox(width: 20),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 14,
+              color: CustomTheme.of(context).subTextColor1,
+            ),
           ),
         ],
       ),
