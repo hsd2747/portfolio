@@ -9,6 +9,7 @@ import '../navigator/router.dart';
 import '../navigator/routes.dart';
 
 import '../components/sequence_animation.dart';
+import '../components/mouse_effect_wrap.dart';
 
 import '../theme/theme_manager.dart';
 import '../theme/custom_theme_data.dart';
@@ -143,16 +144,18 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                 ),
                 SizedBox(width: 10),
-                CupertinoSwitch(
-                  value: CustomTheme.of(context).isDark,
-                  activeColor: CustomTheme.of(context).mainColor,
-                  onChanged: (value) {
-                    if (value) {
-                      customThemeManager.onThemeChanged(DarkThemeData());
-                    } else {
-                      customThemeManager.onThemeChanged(LightThemeData());
-                    }
-                  },
+                MouseEffectWrap(
+                  child: CupertinoSwitch(
+                    value: CustomTheme.of(context).isDark,
+                    activeColor: CustomTheme.of(context).mainColor,
+                    onChanged: (value) {
+                      if (value) {
+                        customThemeManager.onThemeChanged(DarkThemeData());
+                      } else {
+                        customThemeManager.onThemeChanged(LightThemeData());
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
@@ -167,14 +170,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
     VoidCallback onTap,
     MouseCursorModel mouseCursorModel,
   }) {
-    return MouseRegion(
-      onEnter: (event) {
-        mouseCursorModel.setHoverButton(true);
-      },
-      onExit: (event) {
-        mouseCursorModel.setHoverButton(false);
-      },
+    return MouseEffectWrap(
       child: GestureDetector(
+        onTap: onTap,
         child: Container(
           width: double.infinity,
           margin: EdgeInsets.fromLTRB(32, 16, 32, 16),
@@ -188,7 +186,6 @@ class _MainMenuScreenState extends State<MainMenuScreen>
             ),
           ),
         ),
-        onTap: onTap,
       ),
     );
   }

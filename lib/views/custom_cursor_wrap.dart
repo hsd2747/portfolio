@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../models/mouse_cursor.dart';
 
@@ -19,12 +20,28 @@ class CustomCursorWrap extends StatefulWidget {
 }
 
 class _CustomCursorWrapState extends State<CustomCursorWrap> {
+  bool initialize = false;
+
+  @override
+  void initState() {
+    initialize = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mouseCursorModel = Provider.of<MouseCursorModel>(
       context,
       listen: false,
     );
+
+    if (initialize) {
+      initialize = false;
+
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        mouseCursorModel.setHoverButton(false);
+      });
+    }
 
     return Scaffold(
       backgroundColor: CustomTheme.of(context).background,
@@ -37,41 +54,41 @@ class _CustomCursorWrapState extends State<CustomCursorWrap> {
             ? Stack(
                 children: [
                   widget.child,
-                  Selector<MouseCursorModel, bool>(
-                    selector: (context, model) => model.hoverButton,
-                    builder: (context, hoverButton, child) {
-                      return Selector<MouseCursorModel, Offset>(
-                        selector: (context, model) => model.mousePosition,
-                        builder: (context, secondPosition, child) {
-                          return Positioned(
-                            left: hoverButton
-                                ? secondPosition.dx - 25
-                                : secondPosition.dx - 15,
-                            top: hoverButton
-                                ? secondPosition.dy - 25
-                                : secondPosition.dy - 15,
-                            child: IgnorePointer(
-                              ignoring: true,
-                              child: AnimatedContainer(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.bounceIn,
-                                width: hoverButton ? 60 : 40,
-                                height: hoverButton ? 60 : 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                    color: CustomTheme.of(context)
-                                        .mainColorLight50,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    hoverButton ? 30.0 : 20.0,
-                                  ),
-                                ),
+                  Selector<MouseCursorModel, Tuple2<bool, Offset>>(
+                    selector: (context, model) => Tuple2<bool, Offset>(
+                      model.hoverButton,
+                      model.mousePosition,
+                    ),
+                    builder: (context, value, child) {
+                      return AnimatedPositioned(
+                        left: value.item1
+                            ? value.item2.dx - 25
+                            : value.item2.dx - 15,
+                        top: value.item1
+                            ? value.item2.dy - 25
+                            : value.item2.dy - 15,
+                        duration: Duration(
+                          milliseconds: 100,
+                        ),
+                        curve: Curves.easeOutCubic,
+                        child: IgnorePointer(
+                          ignoring: true,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                            width: value.item1 ? 60 : 40,
+                            height: value.item1 ? 60 : 40,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border.all(
+                                color: CustomTheme.of(context).mainColorLight50,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                value.item1 ? 30.0 : 20.0,
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       );
                     },
                   ),
