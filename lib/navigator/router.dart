@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../views/custom_cursor_wrap.dart';
 import '../views/main_menu_screen.dart';
-import '../views/portfolio_screen.dart';
+import '../views/portfolio/portfolio_screen.dart';
 import '../views/first_project/first_project.dart';
 import '../views/second_project/second_project.dart';
 import '../views/third_project/third_project.dart';

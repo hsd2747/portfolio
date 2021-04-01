@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'navigator/route_parser.dart';
 import 'navigator/router.dart';
 
-import 'models/mouse_cursor.dart';
+import 'models/mouse_cursor_model.dart';
 
 import 'theme/custom_theme_data.dart';
 import 'theme/theme_manager.dart';

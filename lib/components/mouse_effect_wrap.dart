@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/mouse_cursor.dart';
+import '../models/mouse_cursor_model.dart';
 
 class MouseEffectWrap extends StatelessWidget {
   final Widget child;

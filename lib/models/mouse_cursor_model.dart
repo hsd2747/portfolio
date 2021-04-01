@@ -5,6 +5,9 @@ class MouseCursorModel extends ChangeNotifier {
   Offset secondPosition = Offset.zero;
   bool hoverButton = false;
 
+  // web smooth scroll
+  ScrollController scrollController = ScrollController();
+
   // dispose flag
   bool _isDisposed = false;
 

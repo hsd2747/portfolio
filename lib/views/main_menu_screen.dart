@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
-import '../models/mouse_cursor.dart';
+import '../models/mouse_cursor_model.dart';
 
 import '../navigator/router.dart';
 import '../navigator/routes.dart';
