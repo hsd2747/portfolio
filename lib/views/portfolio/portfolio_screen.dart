@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../models/mouse_cursor_model.dart';
 
 import '../../components/sequence_animation.dart';
+import 'widgets/main_image_widget.dart';
 
 import '../../theme/theme_manager.dart';
 
@@ -14,32 +15,14 @@ class PortfolioScreen extends StatefulWidget {
   _PortfolioScreenState createState() => _PortfolioScreenState();
 }
 
-class _PortfolioScreenState extends State<PortfolioScreen>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  final GlobalKey _mainImageKey = GlobalKey();
-
+class _PortfolioScreenState extends State<PortfolioScreen> {
   @override
   void dispose() {
-    _controller.dispose();
-
     super.dispose();
   }
 
   @override
   void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(
-        seconds: 7,
-      ),
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (mounted) _controller.forward();
-    });
-
     super.initState();
   }
 
@@ -54,7 +37,11 @@ class _PortfolioScreenState extends State<PortfolioScreen>
       physics: NeverScrollableScrollPhysics(),
       controller: mouseCursorModel.scrollController,
       children: [
-        mainImageWidget(),
+        // Container(
+        //   height: 300,
+        //   color: CustomTheme.of(context).background,
+        // ),
+        MainImageWidget(),
         Container(
           height: 30,
           color: CustomTheme.of(context).background,
@@ -146,87 +133,6 @@ class _PortfolioScreenState extends State<PortfolioScreen>
         SizedBox(height: 5000),
       ],
     );
-  }
-
-  Widget mainImageWidget() {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
-      width: MediaQuery.of(context).size.width,
-      child: Builder(
-        builder: (context) {
-          return Flow(
-            delegate: ParallaxFlowDelegate(
-              scrollable: Scrollable.of(context),
-              itemContext: context,
-              itemKey: _mainImageKey,
-            ),
-            children: [
-              Stack(
-                fit: StackFit.expand,
-                children: [
-                  ImageFiltered(
-                    key: _mainImageKey,
-                    imageFilter: ImageFilter.blur(
-                      sigmaX: 5.0,
-                      sigmaY: 5.0,
-                    ),
-                    child: Image.asset(
-                      'resources/portfolio_main.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 12, horizontal: 36),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 6,
-                          ),
-                        ),
-                        child: Text(
-                          'P O R T F O L I O',
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'MOBILE DEVELOPER   ·   HAN SEUNG DAE',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
-    );
-    // Builder(
-    //   builder: (context) {
-    //     return Flow(
-    //       delegate: ParallaxFlowDelegate(
-    //         scrollable: Scrollable.of(context),
-    //         itemContext: context,
-    //         itemKey: _mainImageKey,
-    //       ),
-    //       children: [
-
-    //       ],
-    //     );
-    //   },
-    // );
   }
 
   // AnimatedBuilder(
@@ -462,174 +368,118 @@ class _PortfolioScreenState extends State<PortfolioScreen>
   //     },
   //   );
 
-  Widget profileChildWidget(
-    String title,
-    String text,
-  ) {
-    return Padding(
-      padding: EdgeInsets.only(top: 15),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              color: CustomTheme.of(context).mainColorLight50,
-            ),
-          ),
-          SizedBox(width: 20),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 14,
-              color: CustomTheme.of(context).subTextColor1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget profileChildWidget(
+  //   String title,
+  //   String text,
+  // ) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(top: 15),
+  //     child: Row(
+  //       children: [
+  //         Text(
+  //           title,
+  //           style: TextStyle(
+  //             fontSize: 14,
+  //             color: CustomTheme.of(context).mainColorLight50,
+  //           ),
+  //         ),
+  //         SizedBox(width: 20),
+  //         Text(
+  //           text,
+  //           style: TextStyle(
+  //             fontSize: 14,
+  //             color: CustomTheme.of(context).subTextColor1,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget profileImageWidget() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Container(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: CustomTheme.of(context).subTextColor4,
-                  offset: Offset(3, 3),
-                  blurRadius: 7,
-                  spreadRadius: 1,
-                )
-              ]),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 170,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: CustomTheme.of(context).mainColor,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '사진',
-                        style: TextStyle(
-                          color: CustomTheme.of(context).mainTextColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 170,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: CustomTheme.of(context).background,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'HAN SEUNG DAE',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: CustomTheme.of(context).mainTextColor,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          'CHARMING',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: CustomTheme.of(context).mainTextColor,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Transform.translate(
-                offset: Offset(0, -22),
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22),
-                    color: CustomTheme.of(context).cardBackground,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class ParallaxFlowDelegate extends FlowDelegate {
-  final ScrollableState scrollable;
-  final BuildContext itemContext;
-  final GlobalKey itemKey;
-
-  ParallaxFlowDelegate({
-    @required this.scrollable,
-    @required this.itemContext,
-    @required this.itemKey,
-  }) : super(repaint: scrollable.position);
-
-  @override
-  BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) {
-    return BoxConstraints.tightFor(
-      width: constraints.maxWidth,
-    );
-  }
-
-  @override
-  void paintChildren(FlowPaintingContext context) {
-    final scrollableBox =
-        this.scrollable.context.findRenderObject() as RenderBox;
-    final itemBox = this.itemContext.findRenderObject() as RenderBox;
-    final itemOffset = itemBox.localToGlobal(
-      itemBox.size.centerLeft(Offset.zero),
-      ancestor: scrollableBox,
-    );
-
-    final viewportDimension = this.scrollable.position.viewportDimension;
-    final scrollFraction = (itemOffset.dy / viewportDimension).clamp(0.0, 1.0);
-
-    final verticalAlignment = Alignment(0.0, scrollFraction * 2 - 1);
-
-    final itemSize =
-        (this.itemKey.currentContext.findRenderObject() as RenderBox).size;
-    final listItemSize = context.size;
-    final childRect = verticalAlignment.inscribe(
-      itemSize,
-      Offset.zero & listItemSize,
-    );
-
-    context.paintChild(
-      0,
-      transform:
-          Transform.translate(offset: Offset(0.0, childRect.top)).transform,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant ParallaxFlowDelegate oldDelegate) {
-    return this.scrollable != oldDelegate.scrollable ||
-        this.itemContext != oldDelegate.itemContext ||
-        this.itemKey != oldDelegate.itemKey;
-  }
+  // Widget profileImageWidget() {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       Stack(
+  //         alignment: Alignment.topCenter,
+  //         children: [
+  //           Container(
+  //             decoration: BoxDecoration(boxShadow: [
+  //               BoxShadow(
+  //                 color: CustomTheme.of(context).subTextColor4,
+  //                 offset: Offset(3, 3),
+  //                 blurRadius: 7,
+  //                 spreadRadius: 1,
+  //               )
+  //             ]),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Container(
+  //                   width: 170,
+  //                   height: 200,
+  //                   decoration: BoxDecoration(
+  //                     color: CustomTheme.of(context).mainColor,
+  //                   ),
+  //                   child: Center(
+  //                     child: Text(
+  //                       '사진',
+  //                       style: TextStyle(
+  //                         color: CustomTheme.of(context).mainTextColor,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   width: 170,
+  //                   height: 60,
+  //                   decoration: BoxDecoration(
+  //                     color: CustomTheme.of(context).background,
+  //                   ),
+  //                   child: Column(
+  //                     mainAxisAlignment: MainAxisAlignment.center,
+  //                     crossAxisAlignment: CrossAxisAlignment.center,
+  //                     children: [
+  //                       Text(
+  //                         'HAN SEUNG DAE',
+  //                         style: TextStyle(
+  //                           fontSize: 16,
+  //                           fontWeight: FontWeight.bold,
+  //                           color: CustomTheme.of(context).mainTextColor,
+  //                         ),
+  //                       ),
+  //                       SizedBox(height: 3),
+  //                       Text(
+  //                         'CHARMING',
+  //                         style: TextStyle(
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.bold,
+  //                           color: CustomTheme.of(context).mainTextColor,
+  //                         ),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           Align(
+  //             alignment: Alignment.topCenter,
+  //             child: Transform.translate(
+  //               offset: Offset(0, -22),
+  //               child: Container(
+  //                 width: 44,
+  //                 height: 44,
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(22),
+  //                   color: CustomTheme.of(context).cardBackground,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 }
