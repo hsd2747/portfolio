@@ -55,6 +55,7 @@ class _MyAppState extends State<MyApp> {
             title: 'Portfolio',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+              fontFamily: 'NanumSquare',
               primarySwatch: Colors.blue,
             ),
             routerDelegate: _appRouterDelegate,

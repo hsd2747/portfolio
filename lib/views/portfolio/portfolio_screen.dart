@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +8,7 @@ import '../../models/mouse_cursor_model.dart';
 
 import '../../components/sequence_animation.dart';
 import 'widgets/main_image_widget.dart';
+import 'widgets/about_me_widget.dart';
 
 import '../../theme/theme_manager.dart';
 
@@ -34,7 +36,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     );
 
     return ListView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: kIsWeb ? NeverScrollableScrollPhysics() : null,
       controller: mouseCursorModel.scrollController,
       children: [
         // Container(
@@ -46,90 +48,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           height: 30,
           color: CustomTheme.of(context).background,
         ),
-        Center(
-          child: Text(
-            'ABOUT ME',
-            style: TextStyle(
-              color: CustomTheme.of(context).subTextColor1,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        SizedBox(height: 60),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: CustomTheme.of(context).lightBackground,
-              ),
-              child: Center(
-                child: Text('사진'),
-              ),
-            ),
-            SizedBox(width: 60),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'MY NAME',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: CustomTheme.of(context).mainTextColor,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  '한승대',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CustomTheme.of(context).subTextColor2,
-                  ),
-                ),
-                SizedBox(height: 40),
-                Text(
-                  'BIRTHDAY',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: CustomTheme.of(context).mainTextColor,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  '1999 . 01 . 25',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CustomTheme.of(context).subTextColor2,
-                  ),
-                ),
-                SizedBox(height: 40),
-                Text(
-                  'CONTACTS',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: CustomTheme.of(context).mainTextColor,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  '010.4145.2757',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: CustomTheme.of(context).subTextColor2,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
+        AboutMeWidget(),
         SizedBox(height: 5000),
       ],
     );

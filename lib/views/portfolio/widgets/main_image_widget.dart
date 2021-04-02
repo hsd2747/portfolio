@@ -28,7 +28,7 @@ class _MainImageWidgetState extends State<MainImageWidget>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(
-        milliseconds: 1500,
+        milliseconds: 2500,
       ),
     );
 
@@ -55,16 +55,19 @@ class _MainImageWidgetState extends State<MainImageWidget>
             ),
             children: [
               Container(
-                //height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height,
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
                     sigmaX: 5.0,
                     sigmaY: 5.0,
                   ),
-                  child: Image.asset(
-                    'resources/portfolio_main.jpg',
-                    key: _mainImageKey,
-                    fit: BoxFit.fill,
+                  child: Transform.scale(
+                    scale: 1.1,
+                    child: Image.asset(
+                      'resources/portfolio_main.jpg',
+                      key: _mainImageKey,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -78,7 +81,7 @@ class _MainImageWidgetState extends State<MainImageWidget>
                 children: [
                   SequenceAnimation(
                     startInterval: 0.0,
-                    endInterval: 0.5,
+                    endInterval: 0.3,
                     controller: _controller,
                     axis: AnimationAxis.right,
                     child: Container(
@@ -113,7 +116,7 @@ class _MainImageWidgetState extends State<MainImageWidget>
                   ),
                   SizedBox(height: 20),
                   SequenceAnimation(
-                    startInterval: 0.5,
+                    startInterval: 0.7,
                     endInterval: 1.0,
                     controller: _controller,
                     axis: AnimationAxis.right,
@@ -129,6 +132,35 @@ class _MainImageWidgetState extends State<MainImageWidget>
               );
             },
           ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 40, 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'SCROLL',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w200,
+                      letterSpacing: 4,
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: 10,
+                    padding: EdgeInsets.fromLTRB(0, 8, 4, 0),
+                    child: CustomPaint(
+                      painter: CustomDownArrow(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -155,36 +187,45 @@ class ParallaxFlowDelegate extends FlowDelegate {
 
   @override
   void paintChildren(FlowPaintingContext context) {
+    // final scrollableBox =
+    //     this.scrollable.context.findRenderObject() as RenderBox;
+    // final itemBox = this.itemContext.findRenderObject() as RenderBox;
+    // final itemOffset = itemBox.localToGlobal(
+    //   itemBox.size.centerLeft(Offset.zero),
+    //   ancestor: scrollableBox,
+    // );
+
+    // final viewportDimension = this.scrollable.position.viewportDimension;
+    // final scrollFraction = (itemOffset.dy / viewportDimension).clamp(0.0, 1.0);
+
+    // double y = scrollFraction * 4 - 1;
+    // final verticalAlignment = Alignment(0.0, y);
+
+    // final itemSize =
+    //     (this.itemKey.currentContext.findRenderObject() as RenderBox).size;
+    // final listItemSize = context.size;
+
+    // final childRect = verticalAlignment.inscribe(
+    //   itemSize,
+    //   Offset.zero & listItemSize,
+    // );
+    //print('${childRect}');
     final scrollableBox =
         this.scrollable.context.findRenderObject() as RenderBox;
     final itemBox = this.itemContext.findRenderObject() as RenderBox;
     final itemOffset = itemBox.localToGlobal(
-      itemBox.size.centerLeft(Offset.zero),
+      itemBox.size.topLeft(Offset.zero),
       ancestor: scrollableBox,
     );
-
-    final viewportDimension = this.scrollable.position.viewportDimension;
-    final scrollFraction = (itemOffset.dy / viewportDimension).clamp(0.0, 1.0);
-
-    double y = scrollFraction * 4 - 1;
-    final verticalAlignment = Alignment(0.0, y);
-
-    final itemSize =
-        (this.itemKey.currentContext.findRenderObject() as RenderBox).size;
-    final listItemSize = context.size;
-
-    print('${verticalAlignment.y} $itemSize');
-    final childRect = verticalAlignment.inscribe(
-      itemSize,
-      Offset.zero & listItemSize,
-    );
+    // print('$itemOffset ${this.scrollable.position.pixels} ');
 
     context.paintChild(
       0,
       transform: Transform.translate(
         offset: Offset(
           0.0,
-          childRect.top,
+          (itemOffset.dy * 0.6) + this.scrollable.position.pixels,
+          // childRect.top,
         ),
       ).transform,
     );
@@ -195,5 +236,31 @@ class ParallaxFlowDelegate extends FlowDelegate {
     return this.scrollable != oldDelegate.scrollable ||
         this.itemContext != oldDelegate.itemContext ||
         this.itemKey != oldDelegate.itemKey;
+  }
+}
+
+class CustomDownArrow extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1.5
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawLine(
+      Offset(size.width, 0),
+      Offset(size.width, size.height),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(size.width, size.height),
+      Offset(0, size.height - (size.height / 4)),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
