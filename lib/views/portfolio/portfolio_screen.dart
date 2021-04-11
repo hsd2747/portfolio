@@ -45,7 +45,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         // ),
         MainImageWidget(),
         Container(
-          height: 30,
+          height: 70,
           color: CustomTheme.of(context).background,
         ),
         AboutMeWidget(),

@@ -11,10 +11,13 @@ class MainImageWidget extends StatefulWidget {
 }
 
 class _MainImageWidgetState extends State<MainImageWidget>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   AnimationController _controller;
 
   final GlobalKey _mainImageKey = GlobalKey();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void dispose() {
@@ -41,6 +44,8 @@ class _MainImageWidgetState extends State<MainImageWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Container(
       height: MediaQuery.of(context).size.height,
       // width: MediaQuery.of(context).size.width,
@@ -135,7 +140,7 @@ class _MainImageWidgetState extends State<MainImageWidget>
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 40, 40),
+              padding: EdgeInsets.fromLTRB(0, 0, 50, 50),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -143,15 +148,15 @@ class _MainImageWidgetState extends State<MainImageWidget>
                   Text(
                     'SCROLL',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       color: Colors.white,
                       fontWeight: FontWeight.w200,
-                      letterSpacing: 4,
+                      letterSpacing: 5,
                     ),
                   ),
                   Container(
-                    height: 40,
-                    width: 10,
+                    height: 50,
+                    width: 15,
                     padding: EdgeInsets.fromLTRB(0, 8, 4, 0),
                     child: CustomPaint(
                       painter: CustomDownArrow(),

@@ -21,8 +21,8 @@ class CustomCursorWrap extends StatefulWidget {
 }
 
 class _CustomCursorWrapState extends State<CustomCursorWrap> {
-  final double scroll_length = 130;
-  final int scroll_speed_ms = 200;
+  double scroll_length = 130;
+  final int scroll_speed_ms = 1000;
 
   bool initialize = false;
 
@@ -48,6 +48,8 @@ class _CustomCursorWrapState extends State<CustomCursorWrap> {
         mouseCursorModel.setHoverButton(false);
       });
     }
+
+    scroll_length = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: CustomTheme.of(context).background,

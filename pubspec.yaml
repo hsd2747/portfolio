@@ -37,6 +37,7 @@ dependencies:
   # Only UI
   cupertino_icons: ^1.0.2
   animated_text_kit: ^4.1.1
+  visibility_detector: ^0.2.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:
