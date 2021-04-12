@@ -36,7 +36,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     );
 
     return ListView(
-      physics: kIsWeb ? NeverScrollableScrollPhysics() : null,
+      physics: NeverScrollableScrollPhysics(),
       controller: mouseCursorModel.scrollController,
       children: [
         // Container(
@@ -44,12 +44,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         //   color: CustomTheme.of(context).background,
         // ),
         MainImageWidget(),
-        Container(
-          height: 70,
-          color: CustomTheme.of(context).background,
-        ),
+        // Container(
+        //   height: 70,
+        //   color: CustomTheme.of(context).background,
+        // ),
         AboutMeWidget(),
-        SizedBox(height: 5000),
+        // SizedBox(height: 5000),
       ],
     );
   }

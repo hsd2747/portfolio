@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+
+import '../utils/user_agent_manager.dart';
 
 import '../models/mouse_cursor_model.dart';
 
@@ -21,12 +24,16 @@ class CustomCursorWrap extends StatefulWidget {
 }
 
 class _CustomCursorWrapState extends State<CustomCursorWrap> {
-  double scroll_length = 130;
-  final int scroll_speed_ms = 1000;
+  double scrollLength = 0;
+  final int scrollSpeedMs = 1000;
 
   bool initialize = false;
 
+  Timer scrollDelay;
+  bool scrolled = false;
+
   double _scroll = 0;
+  int curPosition = 0;
 
   @override
   void initState() {
@@ -49,14 +56,27 @@ class _CustomCursorWrapState extends State<CustomCursorWrap> {
       });
     }
 
-    scroll_length = MediaQuery.of(context).size.height;
+    var screenHeight = MediaQuery.of(context).size.height;
+
+    if (scrollLength != screenHeight) {
+      scrollLength = screenHeight;
+
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (mouseCursorModel.scrollController != null &&
+            mouseCursorModel.scrollController.hasClients) {
+          mouseCursorModel.scrollController.jumpTo(
+            scrollLength * curPosition,
+          );
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: CustomTheme.of(context).background,
-      body: MouseRegion(
-        cursor: SystemMouseCursors.none,
-        child: kIsWeb
-            ? Listener(
+      body: UserAgentManager.getUserAgentType() == AgentType.desktop
+          ? MouseRegion(
+              cursor: SystemMouseCursors.none,
+              child: Listener(
                 behavior: HitTestBehavior.translucent,
                 onPointerHover: (eve) {
                   mouseCursorModel.changeCursorPoint(eve.position);
@@ -65,34 +85,12 @@ class _CustomCursorWrapState extends State<CustomCursorWrap> {
                   mouseCursorModel.changeCursorPoint(eve.position);
                 },
                 onPointerSignal: (pointerSignal) {
-                  if (mouseCursorModel.scrollController == null) return;
-                  if (!mouseCursorModel.scrollController.hasClients) return;
-
-                  int millis = scroll_speed_ms;
-
                   if (pointerSignal is PointerScrollEvent) {
                     if (pointerSignal.scrollDelta.dy > 0) {
-                      _scroll += scroll_length;
+                      moveScrollTask(mouseCursorModel, true);
                     } else {
-                      _scroll -= scroll_length;
+                      moveScrollTask(mouseCursorModel, false);
                     }
-
-                    double maxScrollExtent = mouseCursorModel
-                        .scrollController.position.maxScrollExtent;
-
-                    if (_scroll > maxScrollExtent) {
-                      _scroll = maxScrollExtent;
-                      //millis = scroll_speed_ms ~/ 2;
-                    } else if (_scroll < 0) {
-                      _scroll = 0;
-                      //millis = scroll_speed_ms ~/ 2;
-                    }
-
-                    mouseCursorModel.scrollController.animateTo(
-                      _scroll,
-                      duration: Duration(milliseconds: millis),
-                      curve: Curves.ease,
-                    );
                   }
                 },
                 child: Stack(
@@ -160,9 +158,57 @@ class _CustomCursorWrapState extends State<CustomCursorWrap> {
                     ),
                   ],
                 ),
-              )
-            : widget.child,
-      ),
+              ),
+            )
+          : GestureDetector(
+              onVerticalDragEnd: (details) {
+                print(details.primaryVelocity);
+                if (details.primaryVelocity < -100) {
+                  // scroll down
+                  moveScrollTask(mouseCursorModel, true);
+                } else if (details.primaryVelocity > 100) {
+                  // scroll up
+                  moveScrollTask(mouseCursorModel, false);
+                }
+              },
+              child: widget.child,
+            ),
+    );
+  }
+
+  void moveScrollTask(MouseCursorModel mouseCursorModel, bool scrollDown) {
+    if (mouseCursorModel.scrollController == null) return;
+    if (!mouseCursorModel.scrollController.hasClients) return;
+    if (scrolled) return;
+
+    int millis = scrollSpeedMs;
+
+    if (scrollDown) {
+      _scroll += scrollLength;
+      curPosition++;
+    } else {
+      _scroll -= scrollLength;
+      curPosition--;
+    }
+
+    double maxScrollExtent =
+        mouseCursorModel.scrollController.position.maxScrollExtent;
+
+    if (_scroll > maxScrollExtent) {
+      _scroll = maxScrollExtent;
+    } else if (_scroll < 0) {
+      _scroll = 0;
+    }
+
+    scrolled = true;
+    scrollDelay = Timer(Duration(milliseconds: millis), () {
+      scrolled = false;
+    });
+
+    mouseCursorModel.scrollController.animateTo(
+      _scroll,
+      duration: Duration(milliseconds: millis),
+      curve: Curves.ease,
     );
   }
 }
